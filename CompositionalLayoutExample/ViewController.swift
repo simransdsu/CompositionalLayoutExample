@@ -17,6 +17,28 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         title = "Compositional Collection View"
         images = (1...20).compactMap { UIImage(named: "\($0)") }
+        
+        collectionView.collectionViewLayout = createLayout()
+    }
+    
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        // item
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .fractionalHeight(1)))
+        // adding spacing between each item
+        item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+        
+        // group
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                                         heightDimension: .fractionalHeight(0.5)),
+                                                       subitem: item,
+                                                       count: 2)
+        
+        // section
+        let section = NSCollectionLayoutSection(group: group)
+        
+        // return
+        return UICollectionViewCompositionalLayout(section: section)
     }
 }
 
