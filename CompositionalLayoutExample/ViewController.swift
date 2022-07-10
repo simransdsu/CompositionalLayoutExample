@@ -22,29 +22,37 @@ class ViewController: UIViewController {
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        // item
         
-        // NOTE: Fractional Width of all these items should sum up to 1.0
-        let item1 = CompositionalLayout.createItem(width: .fractionalWidth(0.2),
+        // 2 images one below other
+        let itemForVerticalGroup = CompositionalLayout.createItem(width: .fractionalWidth(1),
+                                                                  height: .fractionalHeight(1),
+                                                                  spacing: 2)
+        let verticalGroup = CompositionalLayout.createGroup(alignment: .vertical,
+                                                            width: .fractionalWidth(0.5),
+                                                            height: .fractionalHeight(1.0),
+                                                           subitem: itemForVerticalGroup,
+                                                           count: 2)
+        
+        // 1 image taking height of 2 images above
+        let item = CompositionalLayout.createItem(width: .fractionalWidth(0.5),
                                                   height: .fractionalHeight(1),
                                                   spacing: 2)
-        
-        let item2 = CompositionalLayout.createItem(width: .fractionalWidth(0.2),
-                                                  height: .fractionalHeight(1),
-                                                  spacing: 2)
-        
-        let item3 = CompositionalLayout.createItem(width: .fractionalWidth(0.6),
-                                                   height: .fractionalHeight(1),
-                                                   spacing: 2)
-        
-        // group
-        let group = CompositionalLayout.createGroup(alignment: .horizontal,
+        let horizontalGroup = CompositionalLayout.createGroup(alignment: .horizontal,
                                                     width: .fractionalWidth(1),
-                                                    height: .fractionalWidth(0.5),
-                                                    subitems: [item1, item3, item2])
+                                                    height: .absolute(400),
+                                                    subitems: [verticalGroup, item])
+        
+        
+        let mainItem = CompositionalLayout.createItem(width: .fractionalWidth(1),
+                                                           height: .absolute(100),
+                                                           spacing: 1)
+        let mainGroup = CompositionalLayout.createGroup(alignment: .vertical,
+                                                             width: .fractionalWidth(1),
+                                                             height: .absolute(500),
+                                                             subitems: [mainItem, horizontalGroup])
         
         // section
-        let section = NSCollectionLayoutSection(group: group)
+        let section = NSCollectionLayoutSection(group: mainGroup)
         
         // return
         return UICollectionViewCompositionalLayout(section: section)
