@@ -65,4 +65,73 @@ struct CompositionalLayout {
                     count: count)
         }
     }
+    
+    
+    static func createStaggeredLayout() -> UICollectionViewCompositionalLayout {
+        // 2 images one below other
+        let itemForVerticalGroup = CompositionalLayout.createItem(width: .fractionalWidth(1),
+                                                                  height: .fractionalHeight(1),
+                                                                  spacing: 2)
+        let verticalGroup = CompositionalLayout.createGroup(alignment: .vertical,
+                                                            width: .fractionalWidth(0.5),
+                                                            height: .fractionalHeight(1.0),
+                                                            subitem: itemForVerticalGroup,
+                                                            count: 2)
+        
+        // 1 image taking height of 2 images above
+        let item = CompositionalLayout.createItem(width: .fractionalWidth(0.5),
+                                                  height: .fractionalHeight(1),
+                                                  spacing: 2)
+        let horizontalGroup = CompositionalLayout.createGroup(alignment: .horizontal,
+                                                              width: .fractionalWidth(1),
+                                                              height: .absolute(400),
+                                                              subitems: [verticalGroup, item])
+        
+        
+        let mainItem = CompositionalLayout.createItem(width: .fractionalWidth(1),
+                                                      height: .absolute(100),
+                                                      spacing: 1)
+        let mainGroup = CompositionalLayout.createGroup(alignment: .vertical,
+                                                        width: .fractionalWidth(1),
+                                                        height: .absolute(500),
+                                                        subitems: [mainItem, horizontalGroup])
+        
+        // section
+        let section = NSCollectionLayoutSection(group: mainGroup)
+        
+        // return
+        return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    
+    static func createGridLayout(numberOfColumns: Int = 2, withSpacing spacing: CGFloat = 2) -> UICollectionViewCompositionalLayout {
+        let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
+                                                  height: .fractionalHeight(1),
+                                                  spacing: spacing)
+        let group = CompositionalLayout.createGroup(alignment: .horizontal,
+                                                    width: .fractionalWidth(1),
+                                                    height: .fractionalWidth(CGFloat(1) / CGFloat(numberOfColumns)),
+                                                    subitem: item, count: numberOfColumns)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        return UICollectionViewCompositionalLayout(section: section)
+        
+    }
+    
+    
+    static func createListLayout(withSpacing spacing: CGFloat = 2) -> UICollectionViewCompositionalLayout {
+        let item = CompositionalLayout.createItem(width: .fractionalWidth(1),
+                                                  height: .fractionalHeight(1),
+                                                  spacing: spacing)
+        let group = CompositionalLayout.createGroup(alignment: .vertical,
+                                                    width: .fractionalWidth(1),
+                                                    height: .absolute(100),
+                                                    subitem: item, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        return UICollectionViewCompositionalLayout(section: section)
+        
+    }
 }
